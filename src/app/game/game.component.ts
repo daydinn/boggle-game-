@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ScoreService } from '../services/score.service';
 
 @Component({
   selector: 'app-game',
@@ -7,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  score: number = 0;  // Player's score
+  totalScore = 0;  // Total score for words
+  words: string[] = [];  // Store manually entered words
+  wordInput: string = '';  // Two-way binding for word input
   players: { name: string, words: string[] }[] = []; // Class-level players property
+  playerScores: { name: string, score: number }[] = []; // Array to store each player's name and score
 
-  constructor() {}
+  constructor(private scoreService: ScoreService) {}
 
   ngOnInit(): void {
     // Initialize players with their word lists
@@ -20,42 +24,43 @@ export class GameComponent implements OnInit {
       { name: 'Klaus', words: ['bumfuzzle', 'wabbit', 'catty', 'flibbertigibbet', 'am', 'loo', 'wampus', 'bibble', 'nudiustertian', 'xertz'] },
       { name: 'Raphael', words: ['bloviate', 'loo', 'xertz', 'mars', 'erinaceous', 'wampus', 'am', 'bibble', 'cattywampus'] },
       { name: 'Tom', words: ['bibble', 'loo', 'snickersnee', 'quire', 'am', 'malarkey'] }
+    
+    
     ];
+    //const words = ['catty', 'wampus', 'am', 'bumfuzzle', 'gardyloo', 'taradiddle', 'loo', 'snickersnee', 'widdershins', 'teabag', 'collywobbles', 'gubbins'];
+    
+    // Calculate scores for all players using the ScoreService
+    this.playerScores = this.scoreService.calculateMultiplayerScore(this.players);
 
-    // Calculate total score
-    const scores = this.calculateMultiplayerScore(this.players);
-    console.log(scores); // Output the scores for each player
   }
-
+  
   /**
-   * Calculates the Boggle score based on word length.
-   * 
-   * @param words - Array of words to score.
-   * @returns Total score based on the Boggle game rules.
-   */
-  calculateBoggleScore(words: string[]): number {
-    return words.reduce((score, word) => {
-      const length = word.length;
-
-      if (length < 3) return score; 
-      if (length >= 8) return score + 11;
-      if (length === 7) return score + 5; 
-      if (length === 6) return score + 3; 
-      if (length === 5) return score + 2; 
-      return score + 1;  // 3 or 4 letters: 1 point
-    }, 0);
+ * Submits the entered word.
+ * - Trims and converts the word to lowercase.
+ * - Adds the word to the list if it has 3 or more characters.
+ * - Recalculates the total score.
+ * - Clears the input field after submission.
+ */
+submitWord(): void {
+  const word = this.wordInput.trim().toLowerCase();  // Clean up input
+  
+  if (word.length >= 3) {  // Validate word length
+    this.words.push(word);  // Add word to list
+    this.calculateTotalScore();  // Update total score
   }
 
-  /**
-   * Calculate the score for each player using their word list.
-   * 
-   * @param players - An array of player objects, where each object contains a player's name and word list.
-   * @returns An array of objects where each object contains the player's name and their total score.
-   */
-  calculateMultiplayerScore(players: { name: string, words: string[] }[]): { name: string, score: number }[] {
-    return players.map(player => {
-      const score = this.calculateBoggleScore(player.words); // Calculate score for each player's words
-      return { name: player.name, score }; // Return the player's name and total score
-    });
-  }
+  this.wordInput = '';  // Clear input
+}
+
+/**
+ * Updates the total score based on the entered words.
+ * - Uses the ScoreService to recalculate the score.
+ */
+calculateTotalScore(): void {
+  this.totalScore = this.scoreService.calculateBoggleScore(this.words);
+}
+
+  
+
+  
 }
