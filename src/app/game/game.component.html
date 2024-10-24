@@ -1,1 +1,6 @@
 <h3>Total Score: {{ score }}</h3>
+
+<!-- Display each player's name and score -->
+<div *ngFor="let player of players">
+  <p>{{ player.name }}: {{ calculateBoggleScore(player.words) }} points</p>
+</div>
