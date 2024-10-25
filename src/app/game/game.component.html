@@ -1,23 +1,30 @@
-<h1>Boggle Game</h1>
+<div class="main-container">
+  <h1>Boggle Game</h1>
 
-<!-- Input for entering words -->
-<div>
-  <input [(ngModel)]="wordInput" placeholder="Enter a word">
-  <button (click)="submitWord()">Submit Word</button>
+  <!-- 4x4 Board Display -->
+  <div class="board-container">
+    <table class="board">
+      <tr *ngFor="let row of board">
+        <td *ngFor="let letter of row" class="cell">
+          {{ letter }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Input and Button -->
+  <div class="input-container">
+    <input [(ngModel)]="wordInput" placeholder="Enter a word">
+    <button (click)="submitWord()">Submit Word</button>
+  </div>
+
+  <!-- Total Score -->
+  <h3>Total Score: {{ totalScore }}</h3>
+
+  <!-- List of Words in column and row logic -->
+  <div class="words-container">
+    <ul class="words-list">
+      <li *ngFor="let word of words">{{ word }}</li>
+    </ul>
+  </div>
 </div>
-
-<!-- Display total score -->
-<h3>Total Score: {{ totalScore }}</h3>
-
-<ul>
-    <!-- Iterate through the 'words' array and display each accepted word entered by the user -->
-    <li *ngFor="let word of words">{{ word }}</li>
-  </ul>
-  
-
-<!-- Display each player's name and score -->
-<!--
-<div *ngFor="let player of playerScores">
-  <p>{{ player.name }}: {{ player.score }} points</p>
-</div>
--->

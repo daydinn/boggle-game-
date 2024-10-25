@@ -1,0 +1,100 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.board-container {
+  margin: 20px 0;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+input {
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #8e44ad;
+  border-radius: 5px;
+  outline: none;
+}
+
+.board {
+  border-collapse: separate;
+  border-spacing: 10px;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.5em;
+  color: #fff;
+  background-color: #3498db;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cell:hover {
+  background-color: #2980b9;
+}
+
+
+input:focus {
+  border-color: #3498db;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #8e44ad;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3498db;
+}
+
+h3 {
+  color: #16a085;
+  margin: 20px 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+
+
+
+
+.words-container {
+  max-width: 300px; /* Maximale Breite der Wörterliste */
+  margin-top: 20px;
+}
+
+.words-list {
+  display: flex;
+  flex-wrap: wrap; /* Ermöglicht Umbruch in neue Zeilen */
+  gap: 10px; /* Abstand zwischen den Wörtern */
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  font-size: 1.2em;
+  color: #34495e;
+}
