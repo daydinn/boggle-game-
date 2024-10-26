@@ -1,11 +1,19 @@
 <div class="main-container">
   <h1>Boggle Game</h1>
 
-  <!-- 4x4 Board Display -->
+   <!-- 4x4 Board Display -->
   <div class="board-container">
     <table class="board">
-      <tr *ngFor="let row of board">
-        <td *ngFor="let letter of row" class="cell">
+      <tr *ngFor="let row of board; let rowIndex = index">
+        <td
+          *ngFor="let letter of row; let colIndex = index"
+          class="cell"
+          [ngClass]="{
+            'highlighted': isCellHighlighted(rowIndex, colIndex),
+            'focused': rowIndex === currentRowIndex && colIndex === currentColIndex
+          }"
+          (click)="onCellClick(letter, rowIndex, colIndex)"
+        >
           {{ letter }}
         </td>
       </tr>
@@ -14,7 +22,7 @@
 
   <!-- Input and Button -->
   <div class="input-container">
-    <input [(ngModel)]="wordInput" placeholder="Enter a word">
+    <input [(ngModel)]="selectedWord" placeholder="" readonly>
     <button (click)="submitWord()">Submit Word</button>
   </div>
 
@@ -24,7 +32,7 @@
   <!-- List of Words in column and row logic -->
   <div class="words-container">
     <ul class="words-list">
-      <li *ngFor="let word of words">{{ word }}</li>
+      <li *ngFor="let submittedWord of submittedWords">{{submittedWord}}</li>
     </ul>
   </div>
 </div>

@@ -1,3 +1,4 @@
+// Main Container
 .main-container {
   display: flex;
   flex-direction: column;
@@ -5,29 +6,23 @@
   text-align: center;
 }
 
+// Header (h1)
+h1 {
+  margin-bottom: 10px;
+}
+
+// Board Container
 .board-container {
   margin: 20px 0;
 }
 
-.input-container {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-input {
-  padding: 10px;
-  font-size: 1em;
-  border: 2px solid #8e44ad;
-  border-radius: 5px;
-  outline: none;
-}
-
+// Table Styling
 .board {
   border-collapse: separate;
   border-spacing: 10px;
 }
 
+// Cell Styling
 .cell {
   width: 50px;
   height: 50px;
@@ -41,15 +36,41 @@ input {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cell:hover {
+// Cell States
+.cell.focused {
+ color: #ebf210;
+}
+
+.cell:not(.highlighted):hover {
   background-color: #2980b9;
 }
 
+.highlighted {
+  background-color: #f39c12;
+  color: #fff;
+}
+
+// Input Container
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+// Input Field
+input {
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #8e44ad;
+  border-radius: 5px;
+  outline: none;
+}
 
 input:focus {
   border-color: #3498db;
 }
 
+// Button Styling
 button {
   padding: 10px 20px;
   font-size: 1em;
@@ -64,36 +85,28 @@ button:hover {
   background-color: #3498db;
 }
 
+// Total Score
 h3 {
   color: #16a085;
   margin: 20px 0;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-
-
-
-
+// Words Container
 .words-container {
-  max-width: 300px; /* Maximale Breite der Wörterliste */
+  max-width: 300px;
   margin-top: 20px;
 }
 
+// Words List
 .words-list {
   display: flex;
-  flex-wrap: wrap; /* Ermöglicht Umbruch in neue Zeilen */
-  gap: 10px; /* Abstand zwischen den Wörtern */
+  flex-wrap: wrap;
+  gap: 10px;
   list-style-type: none;
   padding: 0;
 }
 
+// List Item Styling
 li {
   font-size: 1.2em;
   color: #34495e;

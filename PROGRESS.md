@@ -80,7 +80,41 @@ Used as a reference to review and refresh routing configurations in Angular.
 
 
 
+# Progress: Game Board & Interaction Update
+Updated the GameComponent to streamline word submission, cell selection, and scoring logic. Enhanced features include dynamic highlighting for selected cells, tracking user-entered words, and improved score calculation. The update also introduces a method to toggle cell highlighting for better interactivity and refines input management to ensure valid word submission.Enabled navigation and selection of board cells using arrow keys and Space/Delete key functionality.
+Enhanced the onCellClick method to handle sequential selection and deselection of cells in the board. This ensures that cells can only be deselected in the reverse order of selection. Enhanced both onCellClick and selectLetter methods to manage cell highlighting and selectedWord updates in sync, ensuring consistent behavior between mouse clicks and keyboard navigation. Implemented functionality to enforce that cells can only be deselected in reverse order (last-in, first-out) for an intuitive interaction experience.
+Added isNeighbor method to validate that a cell is selected only if it is adjacent to the last highlighted cell, reinforcing the sequential cell selection rule.
 
+Key Changes
+-Dynamic Word Submission & Scoring
+-Replaced words array with submittedWords  to improve clarity in storing manually entered words.
+-Enhanced `**submitWord()**` method:
+-Added highlightedCells array to manage which cells are selected on the board.
+-Created `**onCellClick()**` method to toggle highlighting:
+-If a cell is already highlighted, it’s removed from highlightedCells.
+-If a cell is not highlighted, it’s added to highlightedCells, and the letter is appended to selectedWord.
+-`**generateRandomBoard()**` method  now supports better interaction with cell highlighting.
+-Added ngClass for dynamic cell highlighting upon click.
+Sources->
+- ngModel enabling real-time synchronization between highlighted cells and input field, providing a responsive user experience.
+-Enabled navigation and selection of board cells using arrow keys and Space/Delete key functionality.
+-Arrow keys (Up, Down, Left, Right) allow movement between cells.
+-Space key selects the current cell, while Delete removes the last selected cell in reverse order.
+-Uses `**removeLastSelectedLetter**` to deselect only the last selected cell.
+Adds new cells sequentially and appends their letters to selectedWord.
+This ensures that users must deselect in the same order as they selected.
+
+Sources->
+Inspired by:https://stackoverflow.com/questions/49177619/
+Inspired by:need-to-get-the-table-row-data-for-which-cell-is-selected-using-jquery
+Inspired by:https://stackoverflow.com/questions/46475843/getting-the-cell-values-for-a-selected-row
+Inspired by:https://ej2.syncfusion.com/javascript/documentation/pivotview/how-to/perform-cell-selection-and-get-selected-cells-information
+I adapted the approach for selecting table elements and retrieving their values from these sources. These resources provided insight into how I could implement logic for selecting table cells and retrieving their values.
+Inspired by:https://www.typescriptlang.org/docs/handbook/intro.html
+Inspired by:https://developer.mozilla.org/en-US/docs/Web/JavaScript
+This resources was used for general syntax reference throughout the project to ensure correct TypeScript or Javascript usage and to remember the key concepts.
+Inspired by:https://v17.angular.io/docs
+I referred to Angular v17 Documentation as a general resource to look up syntax and resolve any Angular-specific issues or questions that arose during the implementation. It was especially helpful when I needed to clarify certain aspects of Angular
 
 
 
