@@ -23,11 +23,11 @@
   <!-- Input and Button -->
   <div class="input-container">
     <input [(ngModel)]="selectedWord" placeholder="" readonly>
-    <button (click)="submitWord()">Submit Word</button>
+    <button (click)="submitWord()">{{ submitWordLabel }}</button>
   </div>
 
   <!-- Total Score -->
-  <h3>Total Score: {{ totalScore }}</h3>
+  <h3>{{ totalScoreLabel }}: {{ totalScore }}</h3>
 
   <!-- List of Words in column and row logic -->
   <div class="words-container">

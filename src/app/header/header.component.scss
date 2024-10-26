@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    padding: 1em;
+    background-color: #2c3e50;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  
+    a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      transition: color 0.3s;
+  
+      &:hover {
+        color: #f39c12;
+      }
+  
+      &.active-link {
+        border-bottom: 2px solid #f39c12;
+      }
+  
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  

@@ -5,8 +5,10 @@ import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },  // Default route for HomeComponent
-  { path: 'game', component: GameComponent }  // Route for GameComponent
+  { path: 'home', component: HomeComponent },
+  { path: 'game', component: GameComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route
+  { path: '**', redirectTo: '/home' } // Wildcard route to catch invalid paths
 ];
 
 

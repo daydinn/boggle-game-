@@ -38,7 +38,7 @@ Key Changes:
 - Moved the **`calculateBoggleScore`** method to handle the scoring logic for individual words based on length.
 - Moved the **`calculateMultiplayerScore`** method to handle multiple players’ scores, making it reusable and easier to maintain.
 
----
+
 
 ## 2. Manual Word Entry for Score Calculation
 
@@ -80,10 +80,9 @@ Used as a reference to review and refresh routing configurations in Angular.
 
 
 
-# Progress: Game Board & Interaction Update
+# Progress: Major Game Board & Interaction Update
 Updated the GameComponent to streamline word submission, cell selection, and scoring logic. Enhanced features include dynamic highlighting for selected cells, tracking user-entered words, and improved score calculation. The update also introduces a method to toggle cell highlighting for better interactivity and refines input management to ensure valid word submission.Enabled navigation and selection of board cells using arrow keys and Space/Delete key functionality.
-Enhanced the onCellClick method to handle sequential selection and deselection of cells in the board. This ensures that cells can only be deselected in the reverse order of selection. Enhanced both onCellClick and selectLetter methods to manage cell highlighting and selectedWord updates in sync, ensuring consistent behavior between mouse clicks and keyboard navigation. Implemented functionality to enforce that cells can only be deselected in reverse order (last-in, first-out) for an intuitive interaction experience.
-Added isNeighbor method to validate that a cell is selected only if it is adjacent to the last highlighted cell, reinforcing the sequential cell selection rule.
+Enhanced the onCellClick method to handle sequential selection and deselection of cells in the board. This ensures that cells can only be deselected in the reverse order of selection. Enhanced both onCellClick and selectLetter methods to manage cell highlighting and selectedWord updates in sync, ensuring consistent behavior between mouse clicks and keyboard navigation. Implemented functionality to enforce that cells can only be deselected in reverse order (last-in, first-out) for an intuitive interaction experience. Added isNeighbor method to validate that a cell is selected only if it is adjacent to the last highlighted cell, reinforcing the sequential cell selection rule.Defined proximity as cells that differ by at most 1 in either row or column, preventing non-sequential cell selection.
 
 Key Changes
 -Dynamic Word Submission & Scoring
@@ -95,27 +94,37 @@ Key Changes
 -If a cell is not highlighted, it’s added to highlightedCells, and the letter is appended to selectedWord.
 -`**generateRandomBoard()**` method  now supports better interaction with cell highlighting.
 -Added ngClass for dynamic cell highlighting upon click.
-Sources->
+-Both methods now use unified logic to update highlightedCells and selectedWord states, ensuring smooth transitions and coordinated highlighting across mouse and keyboard inputs.
 - ngModel enabling real-time synchronization between highlighted cells and input field, providing a responsive user experience.
 -Enabled navigation and selection of board cells using arrow keys and Space/Delete key functionality.
 -Arrow keys (Up, Down, Left, Right) allow movement between cells.
 -Space key selects the current cell, while Delete removes the last selected cell in reverse order.
--Uses `**removeLastSelectedLetter**` to deselect only the last selected cell.
-Adds new cells sequentially and appends their letters to selectedWord.
-This ensures that users must deselect in the same order as they selected.
+-Uses `**removeLastSelectedLetter()**` to deselect only the last selected cell. This ensures that users must deselect in the same order as they selected.
+-Added the focused class to visually highlight the cell currently navigated to via keyboard, improving user experience for keyboard navigation.
+-`**isNeighbor() method ensures cells are only selectable if they are adjacent (horizontally, vertically, or diagonally) to the last highlighted cell. 
+
+
 
 Sources->
-Inspired by:https://stackoverflow.com/questions/49177619/
-Inspired by:need-to-get-the-table-row-data-for-which-cell-is-selected-using-jquery
-Inspired by:https://stackoverflow.com/questions/46475843/getting-the-cell-values-for-a-selected-row
-Inspired by:https://ej2.syncfusion.com/javascript/documentation/pivotview/how-to/perform-cell-selection-and-get-selected-cells-information
-I adapted the approach for selecting table elements and retrieving their values from these sources. These resources provided insight into how I could implement logic for selecting table cells and retrieving their values.
 Inspired by:https://www.typescriptlang.org/docs/handbook/intro.html
 Inspired by:https://developer.mozilla.org/en-US/docs/Web/JavaScript
 This resources was used for general syntax reference throughout the project to ensure correct TypeScript or Javascript usage and to remember the key concepts.
 Inspired by:https://v17.angular.io/docs
 I referred to Angular v17 Documentation as a general resource to look up syntax and resolve any Angular-specific issues or questions that arose during the implementation. It was especially helpful when I needed to clarify certain aspects of Angular
+Inspired by:https://stackoverflow.com/questions/49177619/
+Inspired by:need-to-get-the-table-row-data-for-which-cell-is-selected-using-jquery
+Inspired by:https://stackoverflow.com/questions/46475843/getting-the-cell-values-for-a-selected-row
+Inspired by:https://ej2.syncfusion.com/javascript/documentation/pivotview/how-to/perform-cell-selection-and-get-selected-cells-information
+I adapted the approach for selecting table elements and retrieving their values from these sources. These resources provided insight into how I could implement logic for selecting table cells and retrieving their values.
 
 
 
+# Progress: Enhanced Language Integration & UI Update & Header
+This update introduces a comprehensive overhaul focused on enhancing user experience, dynamic language support, and navigation. A LanguageService has been implemented to allow seamless language switching across the app, ensuring consistent translations on both the Home and Game components. Additionally, the user interface has been refined with a language selection menu, clickable icons, and a visually appealing header for effortless navigation between pages. This update includes new assets, including flags for supported languages, and fixes in routing logic to support smooth transitions between screens. These changes collectively improve the app’s accessibility, usability, and visual appeal.
 
+Key Changes
+-Added a centralized LanguageService to manage active language selection and provide localized content for the application. Key methods include: `**setLanguage()**`: Sets the currently selected language based on user choice.
+`**getTranslations()**`: Retrieves text translations dynamically, simplifying multi-language support for Home and Game components.
+-Added a navigation header for seamless routing between Home and Game screens.
+-Fixed routing issues that prevented smooth transitions back to the Home component from the Game screen.
+-Integrated language icons under assets/icons/ for English, German, and French language selections and navigation icons, enhancing the user interface visually and functionally.

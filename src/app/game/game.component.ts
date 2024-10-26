@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ScoreService } from '../services/score.service';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-game',
@@ -16,15 +17,30 @@ export class GameComponent implements OnInit {
   selectedWord: string = ''; // Current word being selected
   currentRowIndex = 0; // Tracks current row index for navigation
   currentColIndex = 0; // Tracks current column index for navigation
+  submitWordLabel: string = '';
+  totalScoreLabel: string = '';
 
-  constructor(private scoreService: ScoreService) {}
+  constructor(private scoreService: ScoreService,private languageService: LanguageService) {}
 
   ngOnInit(): void {
+
     // Initialize board and calculate initial player scores
     this.playerScores = this.scoreService.calculateMultiplayerScore(this.players);
     this.board = this.generateRandomBoard();
+
+    this.updateTranslations();
   }
 
+ /**
+ * Updates translation labels for UI elements.
+ * Retrieves translations and assigns them to labels
+ * based on the selected language.
+ */
+private updateTranslations(): void {
+  const translations = this.languageService.getTranslations();
+  this.submitWordLabel = translations['submitWord'];
+  this.totalScoreLabel = translations['totalScore'];
+}
   /**
    * Keyboard navigation and selection handling.
    * - Uses arrow keys to navigate through cells.
@@ -172,6 +188,7 @@ selectLetter(): void {
       }
   }
 }
+
 
 
 }
