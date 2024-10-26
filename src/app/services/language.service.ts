@@ -12,6 +12,7 @@ export class LanguageService {
     de: { title: "Willkommen zum Boggle-Spiel", startButton: "Spiel starten", languagePrompt: "Sprache auswählen", submitWord: "Wort einreichen", totalScore: "Gesamtpunktzahl" },
     fr: { title: "Bienvenue au jeu Boggle", startButton: "Démarrer le jeu", languagePrompt: "Choisissez une langue", submitWord: "Soumettre le mot", totalScore: "Score total" }
   };
+
   /**
   * Sets the current language for translations.
   * @param language - Language code (e.g., 'en', 'de', 'fr').
@@ -19,6 +20,10 @@ export class LanguageService {
   */
   setLanguage(language: string): void {
     this.selectedLanguage = language;
+  }
+
+  getLanguage(): string {
+    return this.selectedLanguage;
   }
   /**
   * Retrieves translations for the selected language.

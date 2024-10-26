@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ScoreService } from '../services/score.service';
 import { LanguageService } from '../services/language.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-game',
@@ -17,95 +18,112 @@ export class GameComponent implements OnInit {
   selectedWord: string = ''; // Current word being selected
   currentRowIndex = 0; // Tracks current row index for navigation
   currentColIndex = 0; // Tracks current column index for navigation
-  submitWordLabel: string = '';
-  totalScoreLabel: string = '';
+  submitWordLabel: string = ''; // Label for the "Submit Word" button
+  totalScoreLabel: string = ''; // Label for the "Total Score" display
+  acceptedWords: Set<string> = new Set(); // Set of accepted words based on language
+  selectedLanguage: string = 'en'; // Default selected language
 
-  constructor(private scoreService: ScoreService,private languageService: LanguageService) {}
+  constructor(
+    private scoreService: ScoreService,
+    private languageService: LanguageService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-
-    // Initialize board and calculate initial player scores
+    // Initialize language, words, and board
+    this.selectedLanguage = this.languageService.getLanguage();
+    this.loadAcceptedWords();
     this.playerScores = this.scoreService.calculateMultiplayerScore(this.players);
     this.board = this.generateRandomBoard();
-
     this.updateTranslations();
   }
 
- /**
- * Updates translation labels for UI elements.
- * Retrieves translations and assigns them to labels
- * based on the selected language.
- */
-private updateTranslations(): void {
-  const translations = this.languageService.getTranslations();
-  this.submitWordLabel = translations['submitWord'];
-  this.totalScoreLabel = translations['totalScore'];
-}
   /**
-   * Keyboard navigation and selection handling.
-   * - Uses arrow keys to navigate through cells.
-   * - Space to select a letter, Enter to submit the word.
+   * Updates translation labels for UI elements.
+   * Retrieves translations and assigns them to labels based on the selected language.
+   */
+  private updateTranslations(): void {
+    const translations = this.languageService.getTranslations();
+    this.submitWordLabel = translations['submitWord'];
+    this.totalScoreLabel = translations['totalScore'];
+  }
+
+  /**
+   * Asynchronously loads a list of accepted words based on the selected language.
+   * - Dynamically determines the file path based on the language.
+   * - Processes each line as a word, storing them in a Set to ensure uniqueness and ignore case.
+   */
+  async loadAcceptedWords(): Promise<void> {
+    try {
+      let filePath = 'assets/wordlist-english.txt'; // Default to English
+      if (this.selectedLanguage === 'de') {
+        filePath = 'assets/wortliste-deutsch.txt';
+      } else if (this.selectedLanguage === 'fr') {
+        filePath = 'assets/listedemots-francais.txt';
+      }
+
+      const response = await fetch(filePath);
+      const data = await response.text();
+
+      // Store words in a Set to ensure uniqueness and ignore case
+      this.acceptedWords = new Set(data.split('\n').map(word => word.trim().toLowerCase()));
+      console.log(`Accepted words loaded for language ${this.selectedLanguage}:`, Array.from(this.acceptedWords));
+    } catch (err) {
+      console.error('Error loading accepted words:', err);
+    }
+  }
+
+  /**
+   * Handles keyboard navigation and selection.
+   * - Uses arrow keys to navigate cells, space to select a letter, and Enter to submit the word.
    */
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
     switch (event.key) {
-      case 'ArrowUp':
-        if (this.currentRowIndex > 0) this.currentRowIndex--;
-        break;
-      case 'ArrowDown':
-        if (this.currentRowIndex < this.board.length - 1) this.currentRowIndex++;
-        break;
-      case 'ArrowLeft':
-        if (this.currentColIndex > 0) this.currentColIndex--;
-        break;
-      case 'ArrowRight':
-        if (this.currentColIndex < this.board[this.currentRowIndex].length - 1) this.currentColIndex++;
-        break;
-      case ' ': // Space key to add letter
-        event.preventDefault();
-        this.selectLetter();
-        break;
-      case 'Enter': // Enter key to submit word
-        this.submitWord();
-        break;
-      case 'Backspace': // Delete key to remove the last selected letter
-        this.removeLastSelectedLetter();
-        break;
+      case 'ArrowUp': if (this.currentRowIndex > 0) this.currentRowIndex--; break;
+      case 'ArrowDown': if (this.currentRowIndex < this.board.length - 1) this.currentRowIndex++; break;
+      case 'ArrowLeft': if (this.currentColIndex > 0) this.currentColIndex--; break;
+      case 'ArrowRight': if (this.currentColIndex < this.board[this.currentRowIndex].length - 1) this.currentColIndex++; break;
+      case ' ': event.preventDefault(); this.selectLetter(); break;
+      case 'Enter': this.submitWord(); break;
+      case 'Backspace': this.removeLastSelectedLetter(); break;
     }
   }
-  /**
- * Removes the last highlighted cell and character from `selectedWord`.
- */
-removeLastSelectedLetter(): void {
-  if (this.highlightedCells.length > 0) {
-    this.highlightedCells.pop();  // Remove last highlighted cell
-    this.selectedWord = this.selectedWord.slice(0, -1);  // Update word
-  }
-}
 
- /**
+  /**
+   * Removes the last highlighted cell and character from `selectedWord`.
+   */
+  removeLastSelectedLetter(): void {
+    if (this.highlightedCells.length > 0) {
+      this.highlightedCells.pop();
+      this.selectedWord = this.selectedWord.slice(0, -1);
+    }
+  }
+
+  /**
    * Checks if a cell is adjacent to the last highlighted cell.
    * @param cell - The cell to check adjacency.
    * @returns `true` if adjacent, otherwise `false`.
    */
- isNeighbor(cell: { row: number; col: number }): boolean {
-  const lastCell = this.highlightedCells[this.highlightedCells.length - 1];
-  const rowDiff = Math.abs(cell.row - lastCell.row);
-  const colDiff = Math.abs(cell.col - lastCell.col);
-  return rowDiff <= 1 && colDiff <= 1 && (rowDiff + colDiff > 0);
-}
+  isNeighbor(cell: { row: number; col: number }): boolean {
+    const lastCell = this.highlightedCells[this.highlightedCells.length - 1];
+    const rowDiff = Math.abs(cell.row - lastCell.row);
+    const colDiff = Math.abs(cell.col - lastCell.col);
+    return rowDiff <= 1 && colDiff <= 1 && (rowDiff + colDiff > 0);
+  }
+
   /**
    * Adds the selected word to the list if valid and recalculates the total score.
-   * - Resets the selected word and highlights.
+   * - Ensures word is in the accepted list, clears `selectedWord` and highlights.
    */
   submitWord(): void {
     const word = this.selectedWord.trim().toLowerCase();
-    if (word.length >= 3) {
+    if (word.length >= 3 && this.acceptedWords.has(word)) {
       this.submittedWords.push(word);
       this.calculateTotalScore();
     }
-    this.selectedWord = ''; // Clear input
-    this.highlightedCells = []; // Reset highlights
+    this.selectedWord = '';
+    this.highlightedCells = [];
   }
 
   /**
@@ -142,7 +160,7 @@ removeLastSelectedLetter(): void {
    * @returns `true` if highlighted, otherwise `false`.
    */
   isCellHighlighted(row: number, col: number): boolean {
-    return this.highlightedCells.some((cell) => cell.row === row && cell.col === col);
+    return this.highlightedCells.some(cell => cell.row === row && cell.col === col);
   }
 
   /**
@@ -158,37 +176,25 @@ removeLastSelectedLetter(): void {
     this.selectLetter();
   }
 
-
   /**
- * Selects or deselects a letter on the board based on the current cell.
- * - Adds the cell to `highlightedCells` if it's the first selection or adjacent to the last highlighted cell.
- * - Removes the cell if it's already highlighted, ensuring sequential removal.
- */
-selectLetter(): void {
-  // Define the current cell coordinates and letter
-  const cell = { row: this.currentRowIndex, col: this.currentColIndex };
-  const letter = this.board[cell.row][cell.col];
-
-  // Check if the current cell is already in the highlighted list
-  const cellIndex = this.highlightedCells.findIndex(
+   * Selects or deselects a letter on the board based on the current cell.
+   * - Adds the cell to `highlightedCells` if it's the first selection or adjacent to the last highlighted cell.
+   * - Removes the cell if it's already highlighted, ensuring sequential removal.
+   */
+  selectLetter(): void {
+    const cell = { row: this.currentRowIndex, col: this.currentColIndex };
+    const letter = this.board[cell.row][cell.col];
+    const cellIndex = this.highlightedCells.findIndex(
       highlightedCell => highlightedCell.row === cell.row && highlightedCell.col === cell.col
-  );
+    );
 
-  if (cellIndex > -1) {
-      // If the cell is already highlighted, remove it using the `removeLastSelectedLetter` function
+    if (cellIndex > -1) {
       this.removeLastSelectedLetter();
-  } else {
-      // Adds cell if it's the first or adjacent to the last highlighted cell
-      if (this.highlightedCells.length === 0 || this.isNeighbor(cell)) {
-          this.highlightedCells.push(cell);  // Highlight the cell
-          this.selectedWord += letter;      // Append letter to the selected word
-      } else {
-          // Logs if an attempt is made to select a non-adjacent cell
-          console.log('Only adjacent cells can be selected.');
-      }
+    } else if (this.highlightedCells.length === 0 || this.isNeighbor(cell)) {
+      this.highlightedCells.push(cell);
+      this.selectedWord += letter;
+    } else {
+      console.log('Only adjacent cells can be selected.');
+    }
   }
-}
-
-
-
 }

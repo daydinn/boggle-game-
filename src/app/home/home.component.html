@@ -1,13 +1,12 @@
 <div class="intro-container">
-    <h1>{{ title }}</h1>
-    
-    <h2>{{ languagePrompt }}</h2>
-    <div class="language-icons">
-      <img src="assets/icons/united-kingdom.png" alt="English" (click)="selectLanguage('en')" [class.selected]="selectedLanguage === 'en'" />
-      <img src="assets/icons/germany.png" alt="German" (click)="selectLanguage('de')" [class.selected]="selectedLanguage === 'de'" />
-      <img src="assets/icons/france.png" alt="French" (click)="selectLanguage('fr')" [class.selected]="selectedLanguage === 'fr'" />
-    </div>
+  <h1>{{ title }}</h1>
   
-    <a routerLink="/game" class="play-button">{{ startButtonText }}</a>
+  <h2>{{ languagePrompt }}</h2>
+  <div class="language-icons">
+    <img src="assets/icons/germany.png" alt="German" (click)="selectLanguage('de')" [class.selected]="selectedLanguage === 'de'" />
+    <img src="assets/icons/united-kingdom.png" alt="English" (click)="selectLanguage('en')" [class.selected]="selectedLanguage === 'en'" />
+    <img src="assets/icons/france.png" alt="French" (click)="selectLanguage('fr')" [class.selected]="selectedLanguage === 'fr'" />
   </div>
-  
+
+  <a routerLink="/game" class="play-button">{{ startButtonText }}</a>
+</div>

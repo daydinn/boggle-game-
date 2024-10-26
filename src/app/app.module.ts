@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HeaderComponent } from './header/header.component';
     FormsModule,
   ],
   providers: [
-    provideClientHydration()
+    provideHttpClient(), // 
+    provideClientHydration() // 
   ],
   bootstrap: [AppComponent]
 })
